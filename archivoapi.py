@@ -1,4 +1,4 @@
-import requests # type: ignore 
+import requests
 #Importa la librería requests
 
 url1 = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/refs/heads/main/config.json" #Link de la primera API.

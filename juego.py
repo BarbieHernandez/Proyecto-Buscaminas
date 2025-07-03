@@ -119,6 +119,8 @@ class Juego:
             else:
                 print("Acción no válida. Por favor, ingrese R, M, D o S.")
                 continue # Pedir de nuevo
+        
+        self.tablero.mostrarTablero()
     
     def verificarVictoria(self):
         
