@@ -95,4 +95,4 @@ class CasillaSinMina(Casilla):
         return False 
     
     def contenido_visible(self): #Utiliza la función del método abstracto.
-        return str(self.minasAlrededor) if self.minasAlrededor > 0 else " " 
+        return str(self.minasAlrededor) if self.minasAlrededor > 0 else " "
