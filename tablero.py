@@ -1,4 +1,4 @@
-#Todas las clases y funciones de la clase "Casilla" se importan a este archivo
+#Todas las clases y funciones de la clase "Casilla" se importan a este archivo.
 from casillas import *
 #Usamos el import random para que los numeros que esten en las casillas sean aleatorios.
 import random
@@ -35,7 +35,7 @@ class Tablero:
                 if not self.casillas[fila][columna].esMina(): #Si no hay minas en una casilla, se llama al método "self.contarMinasAlrededor()" para calcular cuántas minas hay en sus casillas vecinas.
                     self.casillas[fila][columna].minasAlrededor = self.contarMinasAlrededor(fila, columna)
     
-    #Calcula cuántas minas hay en las ocho casillas que tiene rodean una casilla seleccionada
+    #Calcula cuántas minas hay en las ocho casillas que tiene rodean una casilla seleccionada.
     def contarMinasAlrededor(self, fila, columna):
         count = 0 #Contador de las minas adyacentes.
         #Se recorren las filas y columnas adyacentes de la casilla actual.
@@ -47,8 +47,8 @@ class Tablero:
         return count #Devuelve el total de minas encontradas alrededor de la casilla.
     
     def revelarCasilla(self, fila, columna):
-        casilla = self.casillas[fila][columna] #Da el objeto Casilla en la posición indicada.
-        #Si la casilla ya no está oculta (revelada) o si la casilla está marcada con una bandera, la función return (termina) sin hacer nada. 
+        casilla = self.casillas[fila][columna] #Da el objeto "Casilla" en la posición indicada.
+        #Si la casilla ya no está oculta (revelada) o si la casilla está marcada con una bandera, la función return termina sin hacer nada. 
         if not casilla.oculta or casilla.marcada or casilla.dudosa: 
             return 
         

@@ -42,7 +42,7 @@ class Casilla(ABC):
         return self.contenido_visible()
     #Si ya está revelada, no se realiza esta función.
     
-#Las clases hijas de Casilla tienen que tener obligatoriamente la función "contenido_visible".
+#Las clases hijas de "Casilla" tienen que tener obligatoriamente la función "contenido_visible".
     @abstractmethod
     def contenido_visible(self):
         pass #Todavía no hay implementación (código) solo la declaración.

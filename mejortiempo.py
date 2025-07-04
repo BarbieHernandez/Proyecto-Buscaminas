@@ -12,7 +12,7 @@ class MejorTiempo:
     def to_dict(self):
         """
     
-        Convierte el objeto MejorTiempo a un diccionario para guardar en JSON.
+        Convierte el objeto "MejorTiempo" a un diccionario para guardar en JSON.
         
         """
         return {
