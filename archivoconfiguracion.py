@@ -21,8 +21,8 @@ class ArchivoConfiguracion: #Maneja la lectura y escritura de un archivo de regi
         with open(file, "a") as archivo: #Abre el archivo en modo de añadido ('a'). 
             archivo.write(datos) #Escribe los datos en el archivo.
 
-    file = "registros.txt" 
-    guardarArchivo(file) 
+    file = "registros.txt" #Se le otorga el nombre "registros.txt" a "file"
+    guardarArchivo(file) #Llama a la función.
 
     def leerArchivo(file):
         """
@@ -37,4 +37,4 @@ class ArchivoConfiguracion: #Maneja la lectura y escritura de un archivo de regi
                 print(registro) #Se imprime "registro".
         except FileNotFoundError: #Si el archivo no existe, significa que no hay registro todavía.
             print(f"Error al leer el archivo de récords: {file}") 
-
+    leerArchivo(file) #Llama a la función.
