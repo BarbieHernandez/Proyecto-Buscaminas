@@ -13,12 +13,21 @@ class Casilla(ABC):
     def esMina(self):
         pass #Todavía no hay implementación (código) solo la declaración.
     
-#Se cambia el estado de la casilla para que ya no esté oculta.
     def revelar(self):
+        """
+        
+        Cambia el estado de la casilla para que ya no esté oculta.
+        
+        """
         self.oculta = False
     
-#Alterna el valor de "marcada" y "dudosa" con el "not", si es True, se convierte en False y viceversa.
     def marcar(self):
+        """
+
+        Alterna el valor de "marcada" y "dudosa" con el "not", si es True, se convierte en False y viceversa.
+        
+
+        """
         if self.dudosa:
             if not self.marcada and not self.dudosa: #Si no está marcada ni dudosa, se puede poner bandera.
                 self.marcada = True
@@ -30,8 +39,13 @@ class Casilla(ABC):
                 self.marcada = False
                 self.dudosa = False
     
-#Evalúa el valor de "self.oculta" y "self.marcada" para decidir que símbolo mostrar.
     def mostrar(self):
+        """
+
+        Evalúa el valor de "self.oculta" y "self.marcada" para decidir que símbolo mostrar.
+        
+
+        """
         if self.oculta: #Si la casilla está oculta, revisa si está marcada con una bandera y devuelve su símbolo, si no, devuelve el cuadro oculto.
             if self.marcada: 
                 return "🚩" 
@@ -50,10 +64,21 @@ class Casilla(ABC):
 #Se crea la clase hija "CasillaConMina" 
 class CasillaConMina(Casilla):
     def esMina(self): #Utiliza la función del método abstracto.
-        return True #Indica que es una mina
+        """
+
+        Indica que es una mina.
+
+    
+        """
+        return True 
     
     def contenido_visible(self): #Utiliza la función del método abstracto.
-        return "💣" #Si la casilla no está oculta, se llama a la función "contenido_visible" para mostrar el símbolo de la bomba.
+        """
+        
+        Si la casilla no está oculta, se llama a la función "contenido_visible" para mostrar el símbolo de la bomba.
+        
+        """
+        return "💣" 
 
 #Se crea la clase hija "CasillaSinMina"
 class CasillaSinMina(Casilla):
@@ -62,7 +87,12 @@ class CasillaSinMina(Casilla):
         self.minasAlrededor = 0 #Contador de minas que hay en las casillas adyacentes
     
     def esMina(self): #Utiliza la función del método abstracto.
-        return False #Indica que no hay una mina
+        """
+        
+        Indica que no hay una mina.
+        
+        """
+        return False 
     
     def contenido_visible(self): #Utiliza la función del método abstracto.
-        return str(self.minasAlrededor) if self.minasAlrededor > 0 else " "
+        return str(self.minasAlrededor) if self.minasAlrededor > 0 else " " 
