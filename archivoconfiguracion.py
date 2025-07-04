@@ -1,52 +1,41 @@
-from mejortiempo import MejorTiempo # Importa la clase MejorTiempo
-import json # Necesario para trabajar con JSON
+from archivoapi import *
 
 class ArchivoConfiguracion:
-    def __init__(self, archivo="records.json"): # Cambiar a .json para indicar el formato
+    def __init__(self, archivo):
         self.archivo = archivo
 
-    def guardarMejorTiempo(self, nuevo_record_obj):
+    def guardarArchivo(self, file):
         """
-        Guarda un nuevo objeto MejorTiempo en el archivo de récords.
-        Lee los récords existentes, añade el nuevo, los ordena y los reescribe.
+
+        Guarda un nuevo objeto "MejorTiempo" en el archivo de récords.
+
+
         """
-        # 1. Leer los récords existentes
-        records_list_of_objects = self.leerMejoresTiempos() # Esto devuelve una lista de objetos MejorTiempo
+        tablero = input("Tamaño del tablero: ")
+        cantidad_de_minas = input("Cantidad de minas en el tablero: ")
+        mejores_tiempos = input("Mejores tiempos: ")
 
-        # 2. Añadir el nuevo récord a la lista
-        records_list_of_objects.append(nuevo_record_obj)
+        datos = f"\n-Tablero jugado: {tablero}\n-Cantidad de minas del tablero: {cantidad_de_minas}\n- 3 mejores tiempos: {mejores_tiempos}"
 
-        # 3. Ordenar la lista de objetos MejorTiempo por su atributo 'tiempo'
-        records_list_of_objects.sort(key=lambda record: record.tiempo)
+        with open(file, "a") as archivo:
+            archivo.write(datos)
 
-        # 4. Convertir la lista de objetos MejorTiempo a una lista de diccionarios para guardar en JSON
-        records_to_save_as_dicts = [record.to_dict() for record in records_list_of_objects]
+    file = "registros.txt"
+    guardarArchivo(file)
 
-        # 5. Escribir la lista de diccionarios en el archivo JSON
-        try:
-            with open(self.archivo, 'w', encoding='utf-8') as f:
-                json.dump(records_to_save_as_dicts, f, indent=4) # 'indent=4' para un JSON más legible
-        except IOError as e:
-            print(f"Error: No se pudo guardar el archivo de récords '{self.archivo}'. {e}")
-
-    def leerMejoresTiempos(self):
+    def leerArchivo(file):
         """
+
         Lee los récords del archivo JSON y los devuelve como una lista de objetos MejorTiempo.
+
+
         """
         try:
-            with open(self.archivo, 'r', encoding='utf-8') as f:
-                data_from_json = json.load(f) # Carga el contenido JSON como una lista de diccionarios
-                # Convierte cada diccionario en un objeto MejorTiempo
-                records_list_of_objects = [MejorTiempo.from_dict(item_dict) for item_dict in data_from_json]
-                return records_list_of_objects
-        except FileNotFoundError:
-            # Si el archivo no existe, significa que no hay récords todavía
-            return []
-        except json.JSONDecodeError:
-            # Si el archivo existe pero su contenido no es un JSON válido
-            print(f"⚠️ Atención: El archivo '{self.archivo}' está corrupto o contiene JSON inválido. Se iniciará con una lista de récords vacía.")
-            return []
-        except Exception as e: # Para capturar cualquier otro error inesperado durante la lectura
-            print(f"⚠️ Error inesperado al leer el archivo de récords: {e}")
-            return []
+            with open(file, "r") as archivo: #Convierte cada diccionario en un objeto.
+                registro = archivo.read()
+                print(registro)   
+        except FileNotFoundError: #Si el archivo no existe, significa que no hay registro todavía.
+            print(f"Error al leer el archivo de récords: {file}")
+         
+    leerArchivo(file)
 
