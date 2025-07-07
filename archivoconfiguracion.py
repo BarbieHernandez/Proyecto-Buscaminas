@@ -8,9 +8,7 @@ class ArchivoConfiguracion: #Maneja la lectura y escritura de un archivo de regi
 
     def guardarArchivo(self, file):
         """
-
         Captura entradas de texto del usuario y las añade al archivo como una cadena de texto simple.
-
 
         """
         tablero = input("Tamaño del tablero: ")
@@ -28,9 +26,7 @@ class ArchivoConfiguracion: #Maneja la lectura y escritura de un archivo de regi
 
     def leerArchivo(file):
         """
-
         Lee y muestra los registros del archivo especificado.
-
 
         """
         try:
@@ -43,10 +39,8 @@ class ArchivoConfiguracion: #Maneja la lectura y escritura de un archivo de regi
 
     def guardarMejorTiempo(self, mejor_tiempo):
         """
-
         Guarda un nuevo objeto "MejorTiempo" en un archivo JSON llamado "mejores_tiempos.json".
         Si el archivo no existe, lo crea. Si ya existe, añade el nuevo récord a la lista.
-
 
         """
         try:
@@ -62,10 +56,8 @@ class ArchivoConfiguracion: #Maneja la lectura y escritura de un archivo de regi
 
     def leerMejoresTiempos(self):
         """
-
         Lee los mejores tiempos desde el archivo "mejores_tiempos.json" y devuelve una lista de objetos "MejorTiempo".
         Si el archivo no existe o está vacío, devuelve una lista vacía.
-
 
         """
         try:

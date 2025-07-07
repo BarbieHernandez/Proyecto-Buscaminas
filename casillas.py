@@ -15,7 +15,6 @@ class Casilla(ABC):
     
     def revelar(self):
         """
-        
         Cambia el estado de la casilla para que ya no esté oculta.
         
         """
@@ -23,9 +22,9 @@ class Casilla(ABC):
     
     def marcar(self):
         """
-
         Alterna el valor de "marcada" y "dudosa" con el "not", si es True, se convierte en False y viceversa.
-        
+        Este método permite al jugador marcar una casilla como sospechosa de contener una mina
+        o dejarla como dudosa si no está seguro. Usa condicionales para alternar entre los tres estados.
 
         """
         if self.dudosa:
@@ -41,9 +40,13 @@ class Casilla(ABC):
     
     def mostrar(self):
         """
-
         Evalúa el valor de "self.oculta" y "self.marcada" para decidir que símbolo mostrar.
-        
+        Si la casilla está oculta:
+            - Devuelve 🚩 si está marcada con una bandera.
+            - Devuelve ❓ si está marcada como dudosa.
+            - Devuelve ⬜ si no tiene ninguna marca.
+        Si la casilla está revelada:
+            - Devuelve el contenido visible de la casilla (mina, número o espacio).
 
         """
         if self.oculta: #Si la casilla está oculta, revisa si está marcada con una bandera y devuelve su símbolo, si no, devuelve el cuadro oculto.
@@ -65,18 +68,15 @@ class Casilla(ABC):
 class CasillaConMina(Casilla):
     def esMina(self): #Utiliza la función del método abstracto.
         """
-
         Indica que es una mina.
 
-    
         """
         return True 
     
     def contenido_visible(self): #Utiliza la función del método abstracto.
         """
-        
         Si la casilla no está oculta, se llama a la función "contenido_visible" para mostrar el símbolo de la bomba.
-        
+    
         """
         return "💣" 
 
@@ -87,8 +87,7 @@ class CasillaSinMina(Casilla):
         self.minasAlrededor = 0 #Contador de minas que hay en las casillas adyacentes
     
     def esMina(self): #Utiliza la función del método abstracto.
-        """
-        
+        """ 
         Indica que no hay una mina.
         
         """
