@@ -1,7 +1,7 @@
-import requests  # Importa la librería requests
+import requests  #Importa la librería requests.
 
 # --- CONFIGURACIÓN DEL JUEGO DESDE LA API ---
-url1 = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/refs/heads/main/config.json"
+url1 = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/refs/heads/main/config.json" #Link de la primera API.
 
 response = requests.get(url1)
 
@@ -53,7 +53,10 @@ else:
     print(f"Error al consultar a la API del leaderboard: {response.status_code}")
 def mostrar_configuracion_y_leaderboard():
     """
+
     Muestra la configuración inicial del juego y una tabla de mejores tiempos simulada.
+
+    
     """
     print("Tamaño del tablero: 8x8")  # Imprime el tamaño base del tablero.
     print("-Cantidad de minas: Facil: 0.1 Medio: 0.3 Dificl: 0.6\n")  # Imprime las proporciones de minas por dificultad.

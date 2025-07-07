@@ -1,3 +1,5 @@
+import json #Permite trabajar con archivos JSON.
+from mejortiempo import MejorTiempo  #Importa la clase que representa un récord de tiempo.
 from archivoapi import * #Todo lo que esté en el archivo "archivoapi" se importa en este archivo.
 
 class ArchivoConfiguracion: #Maneja la lectura y escritura de un archivo de registro.
@@ -38,3 +40,44 @@ class ArchivoConfiguracion: #Maneja la lectura y escritura de un archivo de regi
         except FileNotFoundError: #Si el archivo no existe, significa que no hay registro todavía.
             print(f"Error al leer el archivo de récords: {file}") 
     leerArchivo(file) #Llama a la función.
+
+    def guardarMejorTiempo(self, mejor_tiempo):
+        """
+
+        Guarda un nuevo objeto "MejorTiempo" en un archivo JSON llamado "mejores_tiempos.json".
+        Si el archivo no existe, lo crea. Si ya existe, añade el nuevo récord a la lista.
+
+
+        """
+        try:
+            with open("mejores_tiempos.json", "r") as archivo:
+                datos = json.load(archivo)
+        except (FileNotFoundError, json.JSONDecodeError):
+            datos = []
+
+        datos.append(mejor_tiempo.to_dict())  # Convierte el objeto a diccionario y lo añade.
+
+        with open("mejores_tiempos.json", "w") as archivo:
+            json.dump(datos, archivo, indent=4)  # Guarda la lista actualizada con formato legible.
+
+    def leerMejoresTiempos(self):
+        """
+
+        Lee los mejores tiempos desde el archivo "mejores_tiempos.json" y devuelve una lista de objetos "MejorTiempo".
+        Si el archivo no existe o está vacío, devuelve una lista vacía.
+
+
+        """
+        try:
+            with open("mejores_tiempos.json", "r") as archivo:
+                datos = json.load(archivo)
+                return [
+                    MejorTiempo(
+                        record["nombre"],
+                        record["tiempo"],
+                        tuple(record["tamano"])  # Convierte la lista de vuelta a tupla.
+                    )
+                    for record in datos
+                ]
+        except (FileNotFoundError, json.JSONDecodeError):
+            return []  
