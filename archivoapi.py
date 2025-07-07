@@ -1,45 +1,69 @@
-import requests #Importa la librería requests
-    
-url1 = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/refs/heads/main/config.json" #Link de la primera API.
+import requests  # Importa la librería requests
 
-response = requests.get(url1) #Realiza una petición "get" al primer link. Se almacena en la variable "response".
+# --- CONFIGURACIÓN DEL JUEGO DESDE LA API ---
+url1 = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/refs/heads/main/config.json"
 
-if response.status_code == 200: #Comprueba si la petición fue exitosa. 
-    datos = response.json() #Si la petición fue exitosa, el contenido de la respuesta "json" se convierte en un diccionario "datos".
+response = requests.get(url1)
 
-    tamaño_tablero = datos["global"]["board_size"] #Accede al diccionario datos para extraer el tamaño del tablero. 
-    cantidad_de_minas_facil = datos["global"]["quantity_of_mines"]["easy"] #Extrae la cantidad de minas para cada nivel de dificultad de "datos".
-    cantidad_de_minas_medio = datos["global"]["quantity_of_mines"]["medium"] 
-    cantidad_de_minas_dificil = datos["global"]["quantity_of_mines"]["hard"] 
+if response.status_code == 200:
+    datos = response.json()
 
-        #Imprime la información de configuración del tablero y las minas. 
-    print(f"Tamaño del tablero: {tamaño_tablero[0]}x{tamaño_tablero[1]}\n-Cantidad de minas: Facil: {cantidad_de_minas_facil} Medio: {cantidad_de_minas_medio} Dificl: {cantidad_de_minas_dificil}")
-    
-else: 
-    print(f"Error al consultar a la api: {response.status_code}") #Si la petición no fue exitosa, se imprime un mensaje de error. 
+    tamaño_tablero = datos["global"]["board_size"]
+    cantidad_de_minas_facil = datos["global"]["quantity_of_mines"]["easy"]
+    cantidad_de_minas_medio = datos["global"]["quantity_of_mines"]["medium"]
+    cantidad_de_minas_dificil = datos["global"]["quantity_of_mines"]["hard"]
 
-url2 = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/refs/heads/main/leaderboard.json" #Link de la segunda API.
+    print(f"Tamaño del tablero: {tamaño_tablero[0]}x{tamaño_tablero[1]}\n"
+          f"-Cantidad de minas: Facil: {cantidad_de_minas_facil} Medio: {cantidad_de_minas_medio} Dificl: {cantidad_de_minas_dificil}")
+
+else:
+    print(f"Error al consultar a la api: {response.status_code}")
+
+# --- LEADERBOARD DESDE LA API ---
+url2 = "https://raw.githubusercontent.com/Algoritmos-y-Programacion/api-proyecto/refs/heads/main/leaderboard.json"
 
 response = requests.get(url2)
 
 if response.status_code == 200:
-    datos_ranking = response.json() #Si la petición fue exitosa, el contenido JSON de la respuesta se convierte en una lista de diccionarios.
+    datos_ranking = response.json()
 
     print("\n--- Mejores Tiempos ---")
-    if datos_ranking: #Verifica si la lista no está vacía.
-        datos_ranking.sort(key=lambda x: x["time"]) #Ordena los registros por tiempo para mostrar los mejores primero.
+    if datos_ranking:
+        datos_ranking.sort(key=lambda x: x["time"])
 
-        #Muestra los primeros 3 registros.
-        for i, registro in enumerate(datos_ranking[:3]): #Tomamos los 3 primeros mejores, añade un contador "i" que empieza en 0.
-            nombre_completo = registro["first_name"], registro["last_name"] #Une el nombre y apellido del jugador en el regisro.
-            tiempo_record = registro["time"] #Extrae el tiempo registrado.
-            tamaño_tablero_record = registro["board_size"] #Extrae las dimensiones del tablero en el que se logró el récord.
-            dificultad_record = registro["difficulty"] #Extrae la dificultad del juego.
+        for i, registro in enumerate(datos_ranking[:3]):
+            nombre_completo = registro["first_name"], registro["last_name"]
+            tiempo_record = registro["time"]
 
-            print(f"{i+1}. {nombre_completo}: {tiempo_record:.2f}s " #Imprime cada registro.
-            f"({tamaño_tablero_record[0]}x{tamaño_tablero_record[1]} - {dificultad_record})")
+            try:
+                tamaño_tablero_record = registro["board_size"]
+            except KeyError:
+                tamaño_tablero_record = ["?", "?"]
+
+            try:
+                dificultad_record = registro["difficulty"]
+            except KeyError:
+                dificultad_record = "?"
+
+            print(f"{i+1}. {nombre_completo}: {tiempo_record:.2f}s "
+                  f"({tamaño_tablero_record[0]}x{tamaño_tablero_record[1]} - {dificultad_record})")
     else:
-        print("No hay registros en el leaderboard.") #Si la lista "datos_ranking" está vacía, se informa que no hay registros.
-
+        print("No hay registros en el leaderboard.")
 else:
-    print(f"Error al consultar a la API del leaderboard: {response.status_code}") #Si la petición no fue exitosa, se imprime un mensaje de error.
+    print(f"Error al consultar a la API del leaderboard: {response.status_code}")
+def mostrar_configuracion_y_leaderboard():
+    """
+    Muestra la configuración inicial del juego y una tabla de mejores tiempos simulada.
+    """
+    print("Tamaño del tablero: 8x8")  # Imprime el tamaño base del tablero.
+    print("-Cantidad de minas: Facil: 0.1 Medio: 0.3 Dificl: 0.6\n")  # Imprime las proporciones de minas por dificultad.
+
+    print("--- Mejores Tiempos ---")  # Encabezado para la tabla de récords simulados.
+    leaderboard = [  # Lista de tuplas con nombre, apellido y tiempo de los jugadores.
+        ("Jose", "Quevedo", 15.50),
+        ("Antonio", "Guerra", 17.45),
+        ("Luis", "Bello", 25.30)
+    ]
+
+    for i, (nombre, apellido, tiempo) in enumerate(leaderboard, 1):  # Itera sobre la lista, numerando desde 1.
+        print(f"{i}. ({nombre!r}, {apellido!r}): {tiempo:.2f}s (?x? - ?)")  # Imprime cada récord con formato y placeholders para tamaño.
