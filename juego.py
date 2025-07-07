@@ -1,3 +1,4 @@
+from archivoapi import mostrar_configuracion_y_leaderboard  # Importa la función desde archivoapi.py para poder usarla en el juego.
 from archivoconfiguracion import ArchivoConfiguracion #Todas las clases y funciones de la clase "ArchivoConfiguracion" se importan a este archivo.
 from jugador import Jugador #Todas las clases y funciones de la clase "Jugador" se importan a este archivo.
 from mejortiempo import MejorTiempo #Todas las clases y funciones de la clase "MejorTiempo" se importan a este archivo.
@@ -13,12 +14,10 @@ class Juego:
     }
     
     def __init__(self):
-
         """
         Inicia una nueva instancia de Juego.
         
         """
-
         self.jugador = None #No está asignado, pero va a estarlo cuando un jugador empieze a jugar.
         self.tablero = None #No está asignado, pero se va a asignar dependiendo de las configuraciones del juego.
         self.estadoJuego = "inicio" #Empieza en inicio
@@ -32,11 +31,11 @@ class Juego:
         self.archivo = ArchivoConfiguracion() #Una instancia de "ArchivoConfiguracion" para administrar la configuración del juego.
     
     def iniciar(self):
-
         """
         Inicia un nuevo juego de Buscaminas.
         
         """
+        mostrar_configuracion_y_leaderboard()  #Muestra la configuración del tablero y los mejores tiempos simulados antes de comenzar el juego.
 
         self.jugador = Jugador(input("Nombre del jugador: ")) #Una instancia para que el jugador ponga su nombre antes de empezar a jugar.
         self.estadoJuego = "jugando" #Actualiza el estado del juego a "jugando".
@@ -48,12 +47,10 @@ class Juego:
             print("No se pudo iniciar el juego sin un tablero válido.")
     
     def seleccionarTablero(self):
-
         """
         Solicita al jugador que seleccione un tamaño de tablero según el nivel de dificultad que desea.
         
         """
-
         print("\nSeleccione tamaño de tablero:") #El jugador debe elegir el nivel de dificultad del juego de acuerdo al numero de filas y columnas del tablero.
         print("1. 8x8 (10 minas)") #Nivel de dificultad bajo.
         print("2. 16x16 (40 minas)") #Nivel de dificultad medio.
@@ -64,17 +61,17 @@ class Juego:
         if opcion in self.tamaños: #Verifica si la entrada es una clave válida en el diccionario "tamaños".
             filas, columnas, minas = self.tamaños[opcion] #Saca las dimensiones y el recuento de minas.
             self.tablero = Tablero(filas, columnas, minas) #Crea una nueva instancia de "Tablero".
+            print(f"✅ Tablero creado: {filas}x{columnas} con {minas} minas") #Línea de verificación añadida.
         else:
             print("Opción no válida. Por favor, ingrese 1, 2 o 3.") #Error si no se introducen los numeros mencionados anteriormente.
     
     def jugar(self):
-
         """
         Ejecuta el bucle principal del juego.
         
         """
-
         while self.estadoJuego == "jugando": #Continúa mientras el estado del juego sea "jugando".
+            print(f"Turno actual - Tablero: {self.tablero.filas}x{self.tablero.columnas}")
             self.tablero.mostrarTablero() #Muestra el estado actual del tablero al jugador.
             self.procesarAccion() #Maneja la entrada del jugador y actualiza el tablero en consecuencia.
             self.verificarVictoria() #Comprueba si el juego se ha ganado o perdido.
@@ -82,12 +79,10 @@ class Juego:
         self.mostrarResultados() #Muestra el resultado final del juego (victoria/derrota).
     
     def procesarAccion(self):
-
         """
         Solicita al jugador una acción (Revelar, Marcar o Salir) y coordina, para luego ejecutar la acción elegida en el tablero de juego.
         
         """
-    
         while True: #Bucle para garantizar una entrada de acción válida.
             accion = input("\nAcción (R: Revelar, M: Marcar, , D: Dudosa, S: Salir): ").upper() #"upper()" convierte todos los caracteres de un string en mayúsculas.
         
@@ -107,9 +102,18 @@ class Juego:
                 continue #Pedir de nuevo
 
             if accion == "R": #Si el jugador selecciona R, revelará una casilla.
+                #Validación de coordenadas: asegura que la fila y columna estén dentro del rango del tablero.
+                if not (0 <= fila < self.tablero.filas and 0 <= columna < self.tablero.columnas):
+                    print("⚠️ Coordenadas fuera del rango del tablero. Intenta de nuevo.")
+                    return  #Sale del método sin ejecutar la acción.
+                
                 if not self.tablero.revelarCasilla(fila, columna): #Intenta revelar la celda, si es una mina, "revelarCasilla" es False.
                     self.estadoJuego = "perdido" #El jugador revela una mina, perdiendo el juego.
-                    break
+                    break #Sale del bucle principal del juego.
+                else:
+                    #Si no es una mina, se muestra el tablero actualizado inmediatamente.
+                    self.tablero.mostrarTablero()
+
             elif accion == "M": #Marcar o desmarcar una casilla.
                 self.tablero.marcarCasilla(fila, columna) #Se activa o desactiva una bandera para la fila y la columna basadas en 0.
                 break 
@@ -123,12 +127,10 @@ class Juego:
         self.tablero.mostrarTablero()
     
     def verificarVictoria(self):
-        
         """
         Comprueba si el jugador ha ganado la partida. Se cumple la condición de victoria cuando se revelan todas las celdas del tablero que no son minas.
         
         """
-
         celdas_seguras = 0 #Contador de todas las celdas sin minas en el tablero.
         celdas_reveladas = 0 #Contador de celdas seguras reveladas por el jugador.
         
@@ -144,13 +146,11 @@ class Juego:
             self.tiempoFin = time.time() #Registra la hora exacta en que se ganó el juego.
     
     def mostrarResultados(self):
-
         """
         Muestra los resultados finales del juego al jugador.
         Muestra el estado final del tablero, indica si el jugador ganó, perdió o abandonó, y muestra el tiempo total jugado.
         
         """
-
         self.tablero.mostrarTablero() #Muestra el tablero una última vez con el estado final
         
         if self.estadoJuego == "ganado": #Calcula el tiempo total jugado si se ganó el juego.
@@ -172,12 +172,10 @@ class Juego:
         self.registrarTiempo() #Registra el tiempo del juego sin importar el resultado.
     
     def es_record(self, tiempo):
-
         """
         Determina si un tiempo determinado (duración del juego) califica como un nuevo récord para el tamaño actual del tablero.
         
         """
-
         records = self.archivo.leerMejoresTiempos() #"self.archivo.leerMejoresTiempos()" devuelve una lista de diccionarios.
         if not records: #Si no hay registros, la hora actual se considera automáticamente un registro.
             return True
@@ -196,12 +194,10 @@ class Juego:
 
     
     def registrarTiempo(self):
-
         """
         Lee todos los mejores tiempos existentes, luego los itera e imprime los detalles de los primeros 5 registros, incluyendo el nombre del jugador, el tiempo y las dimensiones del tablero.
         
         """
-        
         records = self.archivo.leerMejoresTiempos() #Ordena los registros por tiempo para garantizar que los mejores tiempos se muestren primero.
         records.sort(key=lambda record: record.tiempo)
         for i, record in enumerate(records[:5], 1): #Itera e imprime solo los 5 registros superiores.
