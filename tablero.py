@@ -10,13 +10,12 @@ class Tablero:
         self.columnas = columnas #Almacena cuantas columnas tendra el tablero.
         self.minasTotales = minas_totales #Almacena cuantas minas tendra el tablero. 
         self.casillas = [] #Se crea una lista vacía que será una matriz para almacenas los objetos que estén en "Casilla".
+        print(f"Tablero instanciado: {self.filas}x{self.columnas} con {self.minasTotales} minas")
         self.generarTablero() 
     
     def generarTablero(self):
         """
-
         Prepara el tablero.
-        
         
         """
         self.casillas = [ #Se crean casillas vacías
@@ -43,10 +42,8 @@ class Tablero:
     
     def contarMinasAlrededor(self, fila, columna):
         """
-        
         Calcula cuántas minas hay en las ocho casillas que tiene rodean una casilla seleccionada.
 
-        
         """
         count = 0 #Contador de las minas adyacentes.
         #Se recorren las filas y columnas adyacentes de la casilla actual.
@@ -59,7 +56,6 @@ class Tablero:
     
     def revelarCasilla(self, fila, columna):
         """
-        
         Revela tanto la casilla como las casillas a su alrededor si no tienen minas.
         
         """
@@ -83,27 +79,21 @@ class Tablero:
     
     def marcarCasilla(self, fila, columna): 
         """
-        
         Permite al jugador marcar una casilla.
 
-        
         """
         self.casillas[fila][columna].marcar() #Obtiene la casilla en la posición dada y llama a su método "marcar()", el cual alterna su estado marcada.
 
     def marcarCasillaDudosa(self, fila, columna):
-        """
-        
+        """ 
         Permite al jugador marcar una casilla con una interrogante.
-        
         
         """
         self.casillas[fila][columna].marcar()
     
     def mostrarTablero(self): 
         """
-        
         Muestra cómo va la jugada del usuario.
-        
         
         """
         for fila in self.casillas: #Itera sobre cada fila del tablero.
